@@ -3,10 +3,12 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from .models import Choice, Question
+from django.utils import timezone
 
 
 def index(request) -> HttpResponse:
-    latest_question_list = Question.objects.order_by("-pub_date")[:10]
+    now = timezone.now()
+    latest_question_list = Question.objects.filter(pub_date__lte=now).order_by("-pub_date")[:5]
     context = {"latest_question_list": latest_question_list}
     return render(request, "index.html", context)
 
